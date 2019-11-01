@@ -33,6 +33,24 @@ setInterval(() => {
     io.emit('concurrent-connections', io.engine.clientsCount)
 }, 5000)
 
+function checkAddFruit(game) {
+    const quantidadeDeFrutas = Object.keys(game.fruits).length
+    const quantidadeDeJogadores = Object.keys(game.players).length
+
+    if (quantidadeDeFrutas >= quantidadeDeJogadores)
+        return
+
+    if(quantidadeDeJogadores > 0) {
+        const fruitData = game.addFruit()
+
+        if (fruitData) {
+            io.emit('fruit-add', fruitData)
+        }
+        console.log(Object.keys(game.players).length)
+        console.log(Object.keys(game.fruits).length)
+    }
+}
+
 io.on('connection', function(socket) {
     const admin = socket.handshake.query.admin
 
@@ -228,8 +246,7 @@ function createGame() {
                     player.x + player.w > fruit.x &&
                     player.y < fruit.y + fruit.height &&
                     player.y + player.h > fruit.y
-                )
-                {
+                ) {
                     player.score = player.score + 1
                     game.removeFruit(fruitId)
 
@@ -247,6 +264,10 @@ function createGame() {
             game.players[socketId].score = 0
         }
     }
+
+    setInterval(() => {
+        checkAddFruit(game)
+    }, 1000)
 
     return game
 }
