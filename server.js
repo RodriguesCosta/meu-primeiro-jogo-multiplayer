@@ -4,6 +4,9 @@ const webApp = express()
 const webServer = require('http').createServer(webApp)
 const io = require('socket.io')(webServer)
 
+const port = process.env.PORT || 3000
+const adminUri = process.env.ADMIN_URI || 'admin31ecc0596d72f84e5ee49e6dc2ecfdfdbabae49a3e3'
+
 const game = createGame()
 let maxConcurrentConnections = 30
 
@@ -12,7 +15,7 @@ webApp.get('/', function(req, res) {
 })
 
 // Coisas que só uma POC vai conhecer
-webApp.get('/a31ecc0596d72f84e5ee403ddcacb3dea94ce0803fc9e6dc2eca1fbabae49a3e3a31ecc0596d72f84e5ee40d0cacb3dea94ce0803fc9e6dc2ecfdfdbabae49a3e3', function(req, res) {
+webApp.get(`/${adminUri}`, function(req, res) {
     res.sendFile(__dirname + '/game-admin.html')
 })
 
@@ -116,8 +119,8 @@ io.on('connection', function(socket) {
 
 });
 
-webServer.listen(3000, function() {
-    console.log('> Server listening on port:', 3000)
+webServer.listen(port, function() {
+    console.log('> Server listening on port:', port)
 });
 
 function createGame() {
