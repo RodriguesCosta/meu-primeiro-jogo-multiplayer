@@ -96,7 +96,7 @@
                     <input type="text" value=2000 id="fruitGameInterval"><br>
                     <button type="button" onclick="startFruitGame()">Start Fruits</button><br>
                     <button type="button" onclick="stopFruitGame()">Stop Fruits</button>
-                </div> 
+                </div>
 
                 <br>
                 <div>
@@ -113,8 +113,8 @@
                 <div>
                     <input type="text" value=15 id="maxConcurrentConnections"><br>
                     <button type="button" onclick="setMaxConcurrentConnections()">Set Concurrent Connections</button><br>
-                </div> 
-    
+                </div>
+
             </div>
     </div>
 
@@ -122,7 +122,8 @@
             let connected = false
             const socket = io({
                 query: {
-                    admin: true
+                    admin: true,
+                    player_icon: 'hostgator'
                 }
             })
             let game
@@ -131,7 +132,7 @@
             let totalPlayersCount = ''
             const collectFruitAudio = new Audio('collect.mp3')
             const collect100FruitAudio = new Audio('100-collect.mp3')
-            
+
             socket.on('connect', () => {
                 connected = true
                 console.log('> Connected to server')
@@ -145,8 +146,8 @@
             socket.on('bootstrap', (gameInitialState) => {
                 game = gameInitialState
                 console.log('> Received initial state')
-                gameCanvas.style.width = `${game.canvasWidth * 18}px`
-                gameCanvas.style.height = `${game.canvasHeight * 18}px`
+                gameCanvas.style.width = `${game.canvasWidth}px`
+                gameCanvas.style.height = `${game.canvasHeight}px`
                 gameCanvas.width = game.canvasWidth
                 gameCanvas.height = game.canvasHeight
 
@@ -156,7 +157,7 @@
 
                 function renderGame() {
                     const allPixels = game.canvasWidth * game.canvasHeight
-                    
+
                     context.globalAlpha = 1
                     context.fillStyle = 'white'
                     context.fillRect(0, 0, game.canvasWidth, game.canvasHeight)
@@ -252,7 +253,7 @@
 
             function updateScoreTable() {
                 const maxResults = 10
-                
+
                 let scoreTableInnerHTML = `
                     <tr class="header">
                         <td>Top 10 Jogadores</td>
@@ -301,7 +302,7 @@
                         playerNotInTop10 = false
                         break
                     }
-                    
+
                     playerNotInTop10 = true
                 }
 
@@ -322,7 +323,7 @@
                 `
 
                 scoreTable.innerHTML = scoreTableInnerHTML
-                
+
             }
 
             function handleKeydown(event) {
@@ -366,7 +367,7 @@
 
                     isThrottled = true;
                     callback.apply(this, arguments);
-                    
+
                     setTimeout(() => {
                     isThrottled = false;
                     if (args) {
